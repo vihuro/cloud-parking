@@ -25,7 +25,7 @@ public class ParkingController {
         this.mapper = mapper;
     }
 
-    @GetMapping("finAll")
+    @GetMapping("findAll")
     public ResponseEntity<List<ParkignDto>> findAll(){
         List<ParkignModel> model = service.findAll();
         List<ParkignDto> dto = mapper.toParkingTOList(model);
@@ -36,10 +36,45 @@ public class ParkingController {
     @GetMapping("findById{id}")
     public ResponseEntity<ParkignDto> findById(@PathVariable String id){
         ParkignModel model = service.finById(id);
+        if(model == null){
+            return ResponseEntity.notFound().build();
+        }
         ParkignDto dto = mapper.toDto(model);
         return ResponseEntity.ok(dto);
 
     }
+
+    @DeleteMapping("deleteById{id}")
+    public ResponseEntity<ParkignDto> deleteById(@PathVariable String id){
+
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PutMapping("updateByBid{id}")
+    public ResponseEntity<ParkignDto> update(@PathVariable String id, @RequestBody ParkingCreateDto dto){
+        var parkingCreate = mapper.toParkingCreate(dto);
+
+        ParkignModel model = service.update(id,parkingCreate);
+        ParkignDto result = mapper.toDto(model);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+
+    }
+
+    @PutMapping("updateExit{id}")
+    public ResponseEntity<ParkignDto> exitParking(@PathVariable String id, @RequestBody ParkingCreateDto dto){
+        var parkingCreate = mapper.toParkingCreate(dto);
+
+        ParkignModel model = service.exit(id,parkingCreate);
+        ParkignDto result = mapper.toDto(model);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+
+    }
+
+
     @PostMapping
     public ResponseEntity<ParkignDto> create(@RequestBody ParkingCreateDto dto){
         var parkingCreate = mapper.toParkingCreate(dto);
@@ -50,5 +85,7 @@ public class ParkingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
 
     }
+
+
 
 }

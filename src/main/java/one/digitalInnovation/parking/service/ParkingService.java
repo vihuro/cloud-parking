@@ -1,5 +1,7 @@
 package one.digitalInnovation.parking.service;
 
+import one.digitalInnovation.parking.dto.ParkingCreateDto;
+import one.digitalInnovation.parking.exception.ParkingFoundException;
 import one.digitalInnovation.parking.model.ParkignModel;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +35,12 @@ public class ParkingService {
 
     public ParkignModel finById(String id) {
 
-        return map.get(id);
+        ParkignModel model = map.get(id);
+        if(model == null){
+            throw new ParkingFoundException(id);
+        }
+
+        return model;
 
     }
 
@@ -45,5 +52,27 @@ public class ParkingService {
 
         return parkingCreate;
 
+    }
+
+    public void  delete(String id) {
+        ParkignModel model = finById(id);
+        map.remove(id);
+
+    }
+
+
+    public ParkignModel update(String id, ParkignModel parkingCreate) {
+        ParkignModel model = finById(id);
+        model.setColor(parkingCreate.getColor());
+        map.replace(id,model);
+        return model;
+    }
+
+    public ParkignModel exit(String id, ParkignModel parkingCreate) {
+
+        ParkignModel model = finById(id);
+        model.setExitDate(LocalDateTime.now());
+        map.replace(id,model);
+        return model;
     }
 }

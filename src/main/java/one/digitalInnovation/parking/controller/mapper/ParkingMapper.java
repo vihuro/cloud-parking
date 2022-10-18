@@ -32,4 +32,6 @@ public class ParkingMapper {
 
         return mapper.map(dto,ParkignModel.class);
     }
+
+
 }
