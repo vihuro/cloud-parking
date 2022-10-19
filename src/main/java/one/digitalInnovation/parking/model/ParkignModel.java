@@ -1,9 +1,14 @@
 package one.digitalInnovation.parking.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+@Entity(name = "Parking")
 public class ParkignModel {
 
+    @Id
     private String id;
     private String license;
     private String state;
