@@ -27,6 +27,8 @@ class ParkingControllerTestIT {
     @Test
     void whenFindAllCheckResult() {
         RestAssured.given()
+                .auth()
+                .basic("user","dio")
                 .get("/parking/findAll")
                 .then()
                 .statusCode(200)
@@ -43,7 +45,8 @@ class ParkingControllerTestIT {
 
 
         RestAssured.given()
-                .when()
+                .auth()
+                .basic("user","dio")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(dto)
                 .post("/parking")
